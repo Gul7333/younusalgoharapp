@@ -1,75 +1,134 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Colors } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import {
+  FlatList,
+  Image,
+  Pressable,
+  SafeAreaView,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+const pdfs = [
+  {
+    title: "Dastoor e Riaz (Urdu)",
+    thumbnail: require("../../assets/pdf/dastoor riaz urdu.png"),
+  },
+  {
+    title: "Deewan e Shahi (Hindi)",
+    thumbnail: require("../../assets/pdf/devaan shahi .png"),
+  },
+  {
+    title: "Deewan e Shahi (Urdu)",
+    thumbnail: require("../../assets/pdf/devaan shahi .png"),
+  },
+  {
+    title: "Imam-Al-Mubeen (Urdu)",
+    thumbnail: require("../../assets/pdf/imam mubeen.png"),
+  },
+  {
+    title: "Malfuzate Mehdi (Hindi)",
+    thumbnail: require("../../assets/pdf/malfuzat mehdi urdu.png"),
+  },
+  {
+    title: "Nisab E Mehdi (Urdu)",
+    thumbnail: require("../../assets/pdf/nisab mehdi.png"),
+  },
+  {
+    title: "Rukhsar e Riaz (Hindi)",
+    thumbnail: require("../../assets/pdf/rukhsar riaz hindi.png"),
+  },
 
-export default function HomeScreen() {
+  {
+    title: "Spiritual Detox - Cognitive Cleansing",
+    thumbnail: require("../../assets/pdf/devaan shahi .png"), // You might want to add a specific thumbnail for this
+  },
+  {
+    title: "The Art of Living",
+    thumbnail: require("../../assets/pdf/devaan shahi .png"), // You might want to add a specific thumbnail for this
+  },
+];
+
+export default function Home() {
+  const router = useRouter();
+  const colorScheme = useColorScheme()
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
+    <SafeAreaView style={{ flex: 1, paddingTop: 20 }}>
+      <FlatList
+        data={pdfs}
+        keyExtractor={(item) => item.title}
+        contentContainerStyle={{ padding: 16 }}
+        renderItem={({ item }) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: "/viewer",
+                params: { title: item.title },
+              })
+            }
+            style={({ pressed }) => ({
+              marginBottom: 16,
+              backgroundColor: colorScheme == "light" ? Colors.light.background : Colors.dark.background,
+              borderRadius: 12,
+              padding: 16,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.1,
+              shadowRadius: 4,
+              elevation: 3,
+              transform: [{ scale: pressed ? 0.98 : 1 }],
             })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 8,
+                  backgroundColor: "#f5f5f5",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: 16,
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  source={item.thumbnail}
+                  style={{ width: "100%", height: "100%" }}
+                  resizeMode="cover"
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "600",
+                    marginBottom: 4,
+                    color: colorScheme === "light" ? "#333": "#fff",
+                  }}
+                >
+                  {item.title}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "#666",
+                  }}
+                >
+                  {item.subtitle || "PDF Document"}
+                </Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color="#999" />{" "}
+            </View>
+          </Pressable>
+        )}
+      />
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
