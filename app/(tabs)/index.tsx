@@ -1,4 +1,5 @@
-import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import {
@@ -7,7 +8,6 @@ import {
   Pressable,
   SafeAreaView,
   Text,
-  useColorScheme,
   View,
 } from "react-native";
 
@@ -18,11 +18,11 @@ const pdfs = [
   },
   {
     title: "Deewan e Shahi (Hindi)",
-    thumbnail: require("../../assets/pdf/devaan shahi .png"),
+    thumbnail: require("../../assets/pdf/devaan shahi.png"),
   },
   {
     title: "Deewan e Shahi (Urdu)",
-    thumbnail: require("../../assets/pdf/devaan shahi .png"),
+    thumbnail: require("../../assets/pdf/devaan shahi.png"),
   },
   {
     title: "Imam-Al-Mubeen (Urdu)",
@@ -43,20 +43,22 @@ const pdfs = [
 
   {
     title: "Spiritual Detox - Cognitive Cleansing",
-    thumbnail: require("../../assets/pdf/devaan shahi .png"), // You might want to add a specific thumbnail for this
+    thumbnail: require("../../assets/pdf/spritual detox.jpg"), // You might want to add a specific thumbnail for this
   },
   {
     title: "The Art of Living",
-    thumbnail: require("../../assets/pdf/devaan shahi .png"), // You might want to add a specific thumbnail for this
+    thumbnail: require("../../assets/pdf/the art of living.jpg"), // You might want to add a specific thumbnail for this
   },
 ];
 
 export default function Home() {
   const router = useRouter();
   const colorScheme = useColorScheme()
-
+  const backgroundColor = useThemeColor({},"background")
+  
+  
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 20 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 20 }} >
       <FlatList
         data={pdfs}
         keyExtractor={(item) => item.title}
@@ -71,7 +73,7 @@ export default function Home() {
             }
             style={({ pressed }) => ({
               marginBottom: 16,
-              backgroundColor: colorScheme == "light" ? Colors.light.background : Colors.dark.background,
+              backgroundColor: backgroundColor,
               borderRadius: 12,
               padding: 16,
               shadowColor: "#000",
@@ -124,7 +126,7 @@ export default function Home() {
                   {item.subtitle || "PDF Document"}
                 </Text>
               </View>
-              <Ionicons name="chevron-forward" size={20} color="#999" />{" "}
+              <Ionicons name="chevron-forward" size={20} color="#999" />
             </View>
           </Pressable>
         )}

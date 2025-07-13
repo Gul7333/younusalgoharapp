@@ -18,7 +18,7 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: true,
-        header: ()=> <ThemedView style={{display: "flex", paddingTop: 40,paddingBottom: 15, alignContent: "center", alignItems: "center" }}><ThemedText type='subtitle' >Younus AlGohar</ThemedText></ThemedView>,
+        header: ()=> <ThemedView style={{display: "flex", paddingTop: 45,paddingBottom: 15, alignContent: "center", alignItems: "center" }}><ThemedText type='subtitle' >Younus AlGohar</ThemedText></ThemedView>,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
         tabBarStyle: Platform.select({

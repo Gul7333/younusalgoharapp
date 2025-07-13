@@ -1,3 +1,4 @@
+import SocialLinks from "@/components/sociallinks";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,6 +21,7 @@ const ProfileScreen = () => {
         <ThemedText style={styles.subtitle}>
           Representative of Riaz Ahmed Gohar Shahi
         </ThemedText>
+        <SocialLinks/>
       </ThemedView>
 
       <ThemedView style={styles.section}>
@@ -229,6 +231,8 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 24,
+    padding: 12,
+    borderRadius: 12,
   },
   profileImage: {
     width: 120,
