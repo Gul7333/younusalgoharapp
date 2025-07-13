@@ -29,7 +29,8 @@ jobs:
           echo "$ANDROID_KEYSTORE_PROPERTIES" | base64 -d > android/keystore.properties
           # Verify properties
           grep "MYAPP" android/keystore.properties || echo "Properties loaded"
-
+      - name: Build Release APK
+        run: cd android
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
