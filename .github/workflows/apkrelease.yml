@@ -8,8 +8,6 @@ on:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-    env:
-      ANDROID_KEYSTORE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
 
     steps:
       - name: Checkout code
@@ -32,42 +30,33 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Restore keystore file
+      - name: Decode Android Keystore
         run: |
-           mkdir -p android/upload-key-store-folder
-           echo "${{ secrets.MYAPP_KEYSTORE }}" | base64 -d > android/upload-key-store-folder/my-younus-app.keystore
-
-      - name: Generate keystore.properties
+              echo "${{ secrets.MYAPP_KEYSTORE }}" | base64 -d > android/app/key.jks
+    
+      - name: Create key.properties
         run: |
-          cat <<EOF > android/keystore.properties
-          storeFile=upload-key-store-folder/my-younus-app.keystore
-          storePassword=${{ secrets.MYAPP_UPLOAD_STORE_PASSWORD }}
-          keyAlias=${{ secrets.MYAPP_UPLOAD_KEY_ALIAS }}
-          keyPassword=${{ secrets.MYAPP_UPLOAD_KEY_PASSWORD }}
-          EOF
+              echo "storePassword=${{ secrets.MYAPP_UPLOAD_STORE_PASSWORD }}" > android/key.properties
+              echo "keyPassword=${{ secrets.MYAPP_UPLOAD_KEY_PASSWORD }}" >> android/key.properties
+              echo "keyAlias=${{ secrets.MYAPP_UPLOAD_KEY_ALIAS }}" >> android/key.properties
+              echo "storeFile=key.jks" >> android/key.properties
 
       - name: Build Release APK
         working-directory: ./android
         run: ./gradlew assembleRelease
-
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: release-$(date +'%Y-%m-%d-%H-%M-%S')
-          name: Release $(date +'%Y-%m-%d %H:%M:%S')
-          draft: false
-          prerelease: false
-          generate_release_notes: true
+          name: release-apk
+          path: android/app/build/outputs/apk/release/app-release.apk
+      - name: Rename APK
+        run: mv android/app/build/outputs/apk/release/app-release.apk android/app/build/outputs/apk/release/younus-app.apk
+        
 
-      - name: Upload Release APK
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release and Upload APK
+        uses: ncipollo/release-action@v1
         with:
-          files: android/app/build/outputs/apk/release/app-release.apk
-
-      - name: Cleanup
-        run: rm -f android/keystore.properties
+          tag: v${{ github.run_number }}
+          name: "Release v${{ github.run_number }}"
+          artifacts: android/app/build/outputs/apk/release/younus-app.apk
+          token: ${{ secrets.GITHUB_TOKEN }}

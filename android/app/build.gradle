@@ -3,7 +3,7 @@ apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 // Load keystore.properties if it exists
 def keystoreProperties = new Properties()
-def keystoreFile = rootProject.file("keystore.properties")
+def keystoreFile = rootProject.file("key.properties")
 if (keystoreFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystoreFile))
 }
@@ -120,11 +120,11 @@ android {
             keyPassword 'android'
         }
         release {
-            storeFile file(keystoreProperties.getProperty('MYAPP_UPLOAD_STORE_FILE', 'debug.keystore'))
-            storePassword keystoreProperties.getProperty('MYAPP_UPLOAD_STORE_PASSWORD', '')
-            keyAlias keystoreProperties.getProperty('MYAPP_UPLOAD_KEY_ALIAS', '')
-            keyPassword keystoreProperties.getProperty('MYAPP_UPLOAD_KEY_PASSWORD', '')
-        }
+        keyAlias keystoreProperties['keyAlias']
+        keyPassword keystoreProperties['keyPassword']
+        storeFile file(keystoreProperties['storeFile']) // key.jks
+        storePassword keystoreProperties['storePassword']
+    }
     }
     
     buildTypes {
