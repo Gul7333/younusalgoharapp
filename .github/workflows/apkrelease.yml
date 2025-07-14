@@ -32,10 +32,19 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Restore signing properties
+      - name: Restore keystore file
         run: |
-          echo "$ANDROID_KEYSTORE_PROPERTIES" | base64 -d > android/keystore.properties
-          grep "MYAPP" android/keystore.properties || echo "Properties loaded"
+           mkdir -p android/upload-key-store-folder
+           echo "${{ secrets.MYAPP_KEYSTORE }}" | base64 -d > android/upload-key-store-folder/my-younus-app.keystore
+
+      - name: Generate keystore.properties
+        run: |
+          cat <<EOF > android/keystore.properties
+          storeFile=upload-key-store-folder/my-younus-app.keystore
+          storePassword=${{ secrets.MYAPP_UPLOAD_STORE_PASSWORD }}
+          keyAlias=${{ secrets.MYAPP_UPLOAD_KEY_ALIAS }}
+          keyPassword=${{ secrets.MYAPP_UPLOAD_KEY_PASSWORD }}
+          EOF
 
       - name: Build Release APK
         working-directory: ./android
