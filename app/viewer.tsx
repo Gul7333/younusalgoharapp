@@ -31,8 +31,9 @@ const getLastPage = async (bookname: string) => {
 
   }
 };
+    // "Dastoor e Riaz (Urdu)": require("@/assets/pdf/Dastoor e Riaz urdu.pdf"),
+
   const pdfMap: any = {
-    "Dastoor e Riaz (Urdu)": require("@/assets/pdf/Dastoor e Riaz urdu.pdf"),
     "Deewan e Shahi (Hindi)": require("@/assets/pdf/Deewan e Shahi Hindi.pdf"),
     "Deewan e Shahi (Urdu)": require("@/assets/pdf/Dewan e Shahi Urdu.pdf"),
     "Imam-Al-Mubeen (Urdu)": require("@/assets/pdf/Imam-Al-Mubeen Urdu.pdf"),

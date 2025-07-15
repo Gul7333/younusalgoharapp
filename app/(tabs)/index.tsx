@@ -11,11 +11,12 @@ import {
   View,
 } from "react-native";
 
+//  {
+//     title: "Dastoor e Riaz (Urdu)",
+//     thumbnail: require("../../assets/pdf/dastoor riaz urdu.png"),
+//   },
 const pdfs = [
-  {
-    title: "Dastoor e Riaz (Urdu)",
-    thumbnail: require("../../assets/pdf/dastoor riaz urdu.png"),
-  },
+ 
   {
     title: "Deewan e Shahi (Hindi)",
     thumbnail: require("../../assets/pdf/devaan shahi.png"),
